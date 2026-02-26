@@ -20,7 +20,7 @@ public class AuthService : IAuthService
         _signInManager = signInManager;
     }
 
-    public async Task<LoginResponseDTO> Login(LoginRequestDTO model)
+    public async Task<LoginResponseDTO> LoginAsync(LoginRequestDTO model)
     {
         var user = await _userManager.FindByEmailAsync(model.Email);
 
@@ -53,7 +53,7 @@ public class AuthService : IAuthService
         };
     }
 
-    public async Task<bool> Register(RegisterRequestDTO model)
+    public async Task<bool> RegisterAsync(RegisterRequestDTO model)
     {
         var existUser = await _userManager.FindByEmailAsync(model.Email);
 

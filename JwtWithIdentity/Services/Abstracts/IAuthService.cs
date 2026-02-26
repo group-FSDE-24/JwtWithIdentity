@@ -5,7 +5,7 @@ namespace JwtWithIdentity.Services.Abstracts;
 public interface IAuthService
 {
     // Login
-    Task<LoginResponseDTO> Login(LoginRequestDTO model);
+    Task<LoginResponseDTO> LoginAsync(LoginRequestDTO model);
     // Register
-    Task<bool> Register(RegisterRequestDTO model);
+    Task<bool> RegisterAsync(RegisterRequestDTO model);
 }

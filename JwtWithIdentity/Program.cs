@@ -5,6 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using JwtWithIdentity.Models.Entities.Concretes;
 using JwtWithIdentity.Services.Abstracts;
 using JwtWithIdentity.Services.Concretes;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +57,21 @@ builder.Services.AddIdentity<User, IdentityRole>()
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        LifetimeValidator = (notBefore, expires, token, param) => expires > DateTime.UtcNow,
+                        ValidIssuer = builder.Configuration["JWT:IsSuer"],
+                        ValidAudience = builder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+
+                    };
+                });
 
 var app = builder.Build();
 
