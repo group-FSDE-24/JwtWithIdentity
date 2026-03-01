@@ -67,7 +67,8 @@ public class SomeBGService : BackgroundService
     /// 1. ToDoItem icerisine ExpireDate elave edirsiz. Migration  
     /// 2. ToDoItem-a aid Controller yaradirsiz. Add Item methodu olur
     /// 3. Ele 1 background service yazirsizki, Burda To Do Item-in expireDate-i eger 1 gunden az qalibsa,
-    ///    Hemin adama Mail gonderilir
+    ///    Hemin adama Mail gonderilir. 10 Deqiqeden bir yoxlanis etsin.
+
 
 
     // /////////////////////////////////////////////////////////////
