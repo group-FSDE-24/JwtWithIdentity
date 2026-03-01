@@ -51,7 +51,12 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddDbContext<AppDbContext>(option =>
+// builder.Services.AddDbContext<AppDbContext>(option =>
+// {
+//     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
+// });
+
+builder.Services.AddDbContextFactory<AppDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
 });

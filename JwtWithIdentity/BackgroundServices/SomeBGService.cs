@@ -1,6 +1,9 @@
 ﻿
 
 
+using JwtWithIdentity.Datas;
+using Microsoft.EntityFrameworkCore;
+
 namespace JwtWithIdentity.BackgroundServices;
 
 public class SomeBGService : BackgroundService
@@ -24,6 +27,12 @@ public class SomeBGService : BackgroundService
     // // TIMER Example 
 
     private Timer _timer;
+    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+
+    public SomeBGService(IDbContextFactory<AppDbContext> dbContextFactory)
+    {
+        _dbContextFactory = dbContextFactory;
+    }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
