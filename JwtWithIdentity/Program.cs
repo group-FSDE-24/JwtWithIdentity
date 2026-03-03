@@ -10,12 +10,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using JwtWithIdentity.BackgroundServices;
 using JwtWithIdentity.Configurations;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 
 
 // ---------------------------------------------
@@ -28,11 +30,55 @@ builder.Services.AddControllers();
 
 // ---------------------------------------------
 
+// --------------------------------------------- 
 
+// Asp uzerinde gelen loglama
+
+
+//builder.Services.AddLogging(c => c.AddConsole());
+
+// ---------------------------------------------
+
+
+// ---------------------------------------------
+
+// Serilog ile loglama, Simple version
+
+// LoggerConfiguration logger = new LoggerConfiguration();
+// 
+// logger.MinimumLevel.Debug();
+// logger.WriteTo.Console();
+// 
+// Log.Logger = logger.CreateLogger();
+
+
+// ---------------------------------------------
+
+// ---------------------------------------------
+
+var template = "[{Timestamp:HH:mm:ss} {Level:u5}] {Message:lj} {EnvironmentName} {ThreadId} {NewLine} {Exception}";
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.File("Log/logger.txt")
+    .WriteTo.Console(outputTemplate: template)
+    .WriteTo.MSSqlServer(builder.Configuration.GetConnectionString("SqlServer"), sinkOptions: new MSSqlServerSinkOptions()
+    {
+        TableName = "LogEvents",
+        AutoCreateSqlTable = true
+    })
+    .Enrich.WithEnvironmentName()
+    .Enrich.WithThreadId()
+    .CreateLogger();
+
+
+builder.Host.UseSerilog();
+
+// ---------------------------------------------
 
 
 // builder.Services.AddHostedService<MyBGService>();
-builder.Services.AddHostedService<SomeBGService>();
+// builder.Services.AddHostedService<SomeBGService>();
 
 builder.Services.Configure<JWTConfig>(builder.Configuration.GetSection("JWT"));
 
@@ -87,7 +133,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = "/api/Auth/Login"; 
+    options.LoginPath = "/api/Auth/Login";
 });
 
 builder.Services.AddAuthentication(options =>
