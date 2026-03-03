@@ -12,6 +12,7 @@ using JwtWithIdentity.BackgroundServices;
 using JwtWithIdentity.Configurations;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using JwtWithIdentity.CustomMiddleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -167,6 +168,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<CentralLoggingMiddleware>();
 
 app.MapControllers();
 
