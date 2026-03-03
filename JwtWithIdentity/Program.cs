@@ -17,6 +17,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
+// ---------------------------------------------
+
+// Loglama 3 yolla ede bilerik:
+
+// 1. Console
+// 2. File
+// 3. DB
+
+// ---------------------------------------------
+
+
+
+
 // builder.Services.AddHostedService<MyBGService>();
 builder.Services.AddHostedService<SomeBGService>();
 
